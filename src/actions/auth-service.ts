@@ -20,6 +20,7 @@ export async function authRenewCheck() {
   if (state.authIssued === null) return performAuth();
   const diff = new Date().getTime() - state.authIssued;
   if (state.auth.expire * 1000 - diff <= 60 * 1000 * 60) {
+    console.log('authRenewCheck');
     return performAuth();
   }
   return state.auth;
