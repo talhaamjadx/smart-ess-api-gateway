@@ -1,13 +1,6 @@
 import { server } from './http/server';
 import './http/router';
-import { performAuth } from './actions/auth-service';
-
-async function authManager() {
-  const { expire } = await performAuth();
-  setInterval(() => {
-    performAuth();
-  }, Math.floor(expire * 0.9) * 1000);
-}
+import { authManager } from './actions/auth-service';
 
 async function main() {
   await authManager();

@@ -13,3 +13,10 @@ export async function performAuth() {
   state.auth = auth;
   return auth;
 }
+
+export async function authManager() {
+  const { expire } = await performAuth();
+  setTimeout(() => {
+    authManager();
+  }, Math.floor(expire * 0.9) * 1000);
+}
