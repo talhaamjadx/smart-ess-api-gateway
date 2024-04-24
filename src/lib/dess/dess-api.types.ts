@@ -137,3 +137,12 @@ export enum QUERY_DEVICE_CONTROL_ID {
   bat_charging_bulk_voltage = 'bat_charging_bulk_voltage',
   bat_charging_float_voltage = 'bat_charging_float_voltage',
 }
+
+export enum DESS_QUERY_ACTION {
+  AUTH_SOURCE = 'authSource',
+  WEB_QUERY_DEVICE_ENERGY_FLOW_ES = 'webQueryDeviceEnergyFlowEs',
+  QUERY_SPDEVICE_LAST_DATA = 'querySPDeviceLastData',
+  QUERY_DEVICE_CTRL_VALUE = 'queryDeviceCtrlValue',
+  QUERY_DEVICE_PARS_ES = 'queryDeviceParsEs',
+  CTRL_DEVICE = 'ctrlDevice',
+}

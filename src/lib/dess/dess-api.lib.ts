@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { hashSha1, transferUriStr } from '../utils';
-import { DessAuthParams } from './dess-api.types';
+import { DESS_QUERY_ACTION, DessAuthParams } from './dess-api.types';
 
 export const COMPANY_KEY = 'bnrl_frRFjEz8Mkn';
 
@@ -62,7 +62,19 @@ export async function createAuthApiRequest(
 
 export async function createAuthApiRemoteRequest(
   auth: DessAuthParams,
-  requestParams: Record<string, string>,
+  requestParams: Record<
+    | string
+    | 'action'
+    | 'pn'
+    | 'sn'
+    | 'id'
+    | 'val'
+    | 'i18n'
+    | 'source'
+    | 'devcode'
+    | 'devaddr',
+    string | DESS_QUERY_ACTION
+  >,
 ) {
   return createApiRequest('/remote/', auth, requestParams);
 }

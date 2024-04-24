@@ -6,6 +6,7 @@ import {
   createAuthApiRequest,
 } from './dess-api.lib';
 import {
+  DESS_QUERY_ACTION,
   DessAuthParams,
   DessAuthResponseData,
   QUERY_DEVICE_CONTROL_ID,
@@ -30,7 +31,7 @@ export async function authUser(
   const salt = new Date().getTime().toString();
   const pwdSha1 = hashedPassword ? password : hashSha1(password);
   const params = {
-    action: 'authSource',
+    action: DESS_QUERY_ACTION.AUTH_SOURCE,
     usr: username,
     source: '1',
     'company-key': COMPANY_KEY,
@@ -54,7 +55,7 @@ export async function webQueryDeviceEnergyFlowEs(
   auth: DessAuthParams,
 ): Promise<WebQueryDeviceEnergyFlowEs> {
   return createAuthApiRequest(auth, {
-    action: 'webQueryDeviceEnergyFlowEs',
+    action: DESS_QUERY_ACTION.WEB_QUERY_DEVICE_ENERGY_FLOW_ES,
     ...sharedRequestParams,
     pn: appConfig.dess.device.pn,
     sn: appConfig.dess.device.sn,
@@ -65,7 +66,7 @@ export async function querySPDeviceLastData(
   auth: DessAuthParams,
 ): Promise<QuerySpdeviceLastData> {
   return createAuthApiRequest(auth, {
-    action: 'querySPDeviceLastData',
+    action: DESS_QUERY_ACTION.QUERY_SPDEVICE_LAST_DATA,
     ...sharedRequestParams,
     i18n: 'en_US',
     pn: appConfig.dess.device.pn,
@@ -78,7 +79,7 @@ export async function queryDeviceCtrlValue(
   id: QUERY_DEVICE_CONTROL_ID = QUERY_DEVICE_CONTROL_ID.bse_output_source_priority,
 ): Promise<QueryDeviceCtrlValue> {
   return createAuthApiRequest(auth, {
-    action: 'queryDeviceCtrlValue',
+    action: DESS_QUERY_ACTION.QUERY_DEVICE_CTRL_VALUE,
     ...sharedRequestParams,
     i18n: 'en_US',
     pn: appConfig.dess.device.pn,
@@ -91,7 +92,7 @@ export async function queryDeviceParsEs(
   auth: DessAuthParams,
 ): Promise<QueryDeviceParsEs> {
   return createAuthApiRequest(auth, {
-    action: 'queryDeviceParsEs',
+    action: DESS_QUERY_ACTION.QUERY_DEVICE_PARS_ES,
     ...sharedRequestParams,
     i18n: 'en_US',
     pn: appConfig.dess.device.pn,
@@ -104,7 +105,7 @@ export async function setDeviceParsEs(
   value: string,
 ): Promise<QueryDeviceParsEs> {
   return createAuthApiRemoteRequest(auth, {
-    action: 'ctrlDevice',
+    action: DESS_QUERY_ACTION.CTRL_DEVICE,
     ...sharedRequestParams,
     i18n: 'en_US',
     pn: appConfig.dess.device.pn,
