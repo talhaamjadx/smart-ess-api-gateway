@@ -1,6 +1,7 @@
 import * as dess from '../lib/dess/dess';
 import { appConfig } from '../config';
 import { state } from '../state';
+import { DessAuthResponseData } from '../lib/dess/dess-api.types';
 
 export async function performAuth() {
   console.log('performAuth');
@@ -11,12 +12,29 @@ export async function performAuth() {
   );
   console.log('performAuth:success', auth.uid);
   state.auth = auth;
+  state.authIssued = new Date().getTime();
   return auth;
 }
 
-export async function authManager() {
-  const { expire } = await performAuth();
-  setTimeout(() => {
-    authManager();
-  }, Math.floor(expire * 0.9) * 1000);
+export async function authRenewCheck() {
+  if (state.authIssued === null) return performAuth();
+  const diff = new Date().getTime() - state.authIssued;
+  if (diff <= 60 * 1000 * 60) {
+    return performAuth();
+  }
+  return state.auth;
+}
+
+export async function authWatchManager() {
+  await performAuth();
+  setInterval(() => {
+    authRenewCheck();
+  }, 10_000);
+}
+
+export function formatAuthData(auth: DessAuthResponseData) {
+  return {
+    token: auth.token,
+    secret: auth.secret,
+  };
 }

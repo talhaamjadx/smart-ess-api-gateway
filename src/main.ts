@@ -1,9 +1,9 @@
 import { server } from './http/server';
 import './http/router';
-import { authManager } from './actions/auth-service';
+import { authWatchManager } from './actions/auth-service';
 
 async function main() {
-  await authManager();
+  await authWatchManager();
   server.listen(
     {
       port: Number.parseInt(process.env.PORT || '8000'),
