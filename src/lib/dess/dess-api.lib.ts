@@ -25,17 +25,18 @@ export function generateParamsSign(
 }
 
 export const api = axios.create({
-  baseURL: 'https://web.dessmonitor.com/public/',
+  baseURL: 'https://web.dessmonitor.com',
 });
 
-export async function createAuthApiRequest(
+export async function createApiRequest(
+  path: string,
   auth: DessAuthParams,
   requestParams: Record<string, string>,
 ) {
   const { token, secret } = auth;
   const { sign, salt } = generateParamsSign(token, secret, requestParams);
   return await api
-    .get('', {
+    .get(path, {
       params: {
         sign,
         salt,
@@ -50,4 +51,18 @@ export async function createAuthApiRequest(
         return r.data.dat;
       }
     });
+}
+
+export async function createAuthApiRequest(
+  auth: DessAuthParams,
+  requestParams: Record<string, string>,
+) {
+  return createApiRequest('/public/', auth, requestParams);
+}
+
+export async function createAuthApiRemoteRequest(
+  auth: DessAuthParams,
+  requestParams: Record<string, string>,
+) {
+  return createApiRequest('/remote/', auth, requestParams);
 }

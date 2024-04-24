@@ -1,5 +1,6 @@
 import { server } from './server';
 import * as dess from '../lib/dess/dess';
+import { setDeviceParsEs } from '../lib/dess/dess';
 import { state } from '../state';
 import { ResponseDessHttpData, ResponseDessHttpSettings } from './responses';
 import { QUERY_DEVICE_CONTROL_ID } from '../lib/dess/dess-api.types';
@@ -52,5 +53,22 @@ server.get('/settings', async function handler(request, reply) {
     settings,
   };
 
+  reply.send(payload);
+});
+
+server.get('/settings-set', async function handler(request, reply) {
+  if (!state.auth) {
+    reply.callNotFound();
+  }
+  const auth = {
+    token: state.auth.token,
+    secret: state.auth.secret,
+  };
+  console.log(request.query);
+  const payload = await setDeviceParsEs(
+    auth,
+    request.query['id'],
+    request.query['value'],
+  );
   reply.send(payload);
 });

@@ -1,5 +1,10 @@
 import { hashSha1, transferUriStr } from '../utils';
-import { api, COMPANY_KEY, createAuthApiRequest } from './dess-api.lib';
+import {
+  api,
+  COMPANY_KEY,
+  createAuthApiRemoteRequest,
+  createAuthApiRequest,
+} from './dess-api.lib';
 import {
   DessAuthParams,
   DessAuthResponseData,
@@ -33,7 +38,7 @@ export async function authUser(
   let uriStr = transferUriStr(params);
   let sign = hashSha1(`${salt}${pwdSha1}&${uriStr}`);
   return await api
-    .get('', {
+    .get('/public/', {
       params: {
         sign,
         salt,
@@ -91,5 +96,20 @@ export async function queryDeviceParsEs(
     i18n: 'en_US',
     pn: appConfig.dess.device.pn,
     sn: appConfig.dess.device.sn,
+  });
+}
+export async function setDeviceParsEs(
+  auth: DessAuthParams,
+  id: QUERY_DEVICE_CONTROL_ID = QUERY_DEVICE_CONTROL_ID.bse_output_source_priority,
+  value: string,
+): Promise<QueryDeviceParsEs> {
+  return createAuthApiRemoteRequest(auth, {
+    action: 'ctrlDevice',
+    ...sharedRequestParams,
+    i18n: 'en_US',
+    pn: appConfig.dess.device.pn,
+    sn: appConfig.dess.device.sn,
+    id,
+    val: value,
   });
 }
