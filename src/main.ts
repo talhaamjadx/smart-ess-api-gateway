@@ -1,0 +1,30 @@
+import { server } from './http/server';
+import './http/router';
+import { performAuth } from './actions/auth-service';
+
+async function authManager() {
+  const { expire } = await performAuth();
+  setInterval(() => {
+    performAuth();
+  }, Math.floor(expire * 0.9) * 1000);
+}
+
+async function main() {
+  await authManager();
+  server.listen(
+    {
+      port: Number.parseInt(process.env.PORT || '8000'),
+      host: process.env.HOST || '0.0.0.0',
+    },
+    (err) => {
+      if (err) {
+        server.log.error(err);
+        process.exit(1);
+      } else {
+        console.log('Server started');
+      }
+    },
+  );
+}
+
+main();
