@@ -23,7 +23,7 @@ export async function authRenewCheck() {
   const diff = new Date().getTime() - state.authIssued;
   if (state.auth.expire * 1000 - diff <= AUTH_EDGE_DIFF) {
     console.log('authRenewCheck');
-    performAuth();
+    return performAuth();
   }
   return state.auth;
 }
