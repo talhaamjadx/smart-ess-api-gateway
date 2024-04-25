@@ -3,6 +3,8 @@ import { appConfig } from '../config';
 import { state } from '../state';
 import { DessAuthResponseData } from '../lib/dess/dess-api.types';
 
+const AUTH_EDGE_DIFF = 60 * 60 * 1000;
+
 export async function performAuth() {
   console.log('performAuth');
   const auth = await dess.authUser(
@@ -19,9 +21,9 @@ export async function performAuth() {
 export async function authRenewCheck() {
   if (state.authIssued === null) return performAuth();
   const diff = new Date().getTime() - state.authIssued;
-  if (state.auth.expire * 1000 - diff <= 60 * 1000 * 60) {
+  if (state.auth.expire * 1000 - diff <= AUTH_EDGE_DIFF) {
     console.log('authRenewCheck');
-    return performAuth();
+    performAuth();
   }
   return state.auth;
 }
