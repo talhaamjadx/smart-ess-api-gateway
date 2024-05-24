@@ -11,6 +11,7 @@ export const appConfig = {
     device: {
       pn: env.DESS_DEVICE_PN,
       sn: env.DESS_DEVICE_SN,
+      devcode: env.DESS_DEVICE_DEVCODE,
     },
   },
 };

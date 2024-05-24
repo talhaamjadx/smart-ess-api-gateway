@@ -19,7 +19,7 @@ import { appConfig } from '../../config';
 
 const sharedRequestParams = {
   source: '1',
-  devcode: '2334',
+  devcode: appConfig.dess.device.devcode,
   devaddr: '1',
 };
 
