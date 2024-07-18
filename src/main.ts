@@ -12,6 +12,7 @@ async function main() {
     (err) => {
       if (err) {
         server.log.error(err);
+        console.error(err);
         process.exit(1);
       } else {
         console.log('Server started');

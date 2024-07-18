@@ -12,7 +12,7 @@ export const appConfig = {
       pn: env.DESS_DEVICE_PN,
       sn: env.DESS_DEVICE_SN,
       devcode: env.DESS_DEVICE_DEVCODE,
-      devaddress: env.DESS_DEVICE_DEVADDRESS,
+      devaddress: env.DESS_DEVICE_DEVADDR,
     },
   },
 };

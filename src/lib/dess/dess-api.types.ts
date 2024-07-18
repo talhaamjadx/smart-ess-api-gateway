@@ -146,3 +146,23 @@ export enum DESS_QUERY_ACTION {
   QUERY_DEVICE_PARS_ES = 'queryDeviceParsEs',
   CTRL_DEVICE = 'ctrlDevice',
 }
+
+export interface FormattedResponseData {
+  battery_voltage: string;
+  battery_status: string;
+  battery_charger_source_priority: string;
+  battery_charging_current: string;
+  battery_discharge_current: string;
+  solar_grid_in_voltage: string;
+  solar_pv_voltage: string;
+  solar_pv_power: string;
+  output_source_priority: string;
+  battery_real_level: string;
+}
+
+export enum ParameterPrefix {
+  BATTERY = 'bt_',
+  PV = 'pv_',
+  GRID = 'gd_',
+  BC = 'bc_',
+}

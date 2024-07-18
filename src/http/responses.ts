@@ -1,4 +1,5 @@
 import {
+  FormattedResponseData,
   QueryDeviceCtrlValue,
   QueryDeviceParsEs,
   QuerySpdeviceLastData,
@@ -9,6 +10,7 @@ export interface ResponseDessHttpData {
   webQueryDeviceEnergyFlowEs: WebQueryDeviceEnergyFlowEs;
   querySPDeviceLastData: QuerySpdeviceLastData;
   queryDeviceParsEs: QueryDeviceParsEs;
+  formattedData: FormattedResponseData;
 }
 
 export interface ResponseDessHttpSettings {
