@@ -1,9 +1,8 @@
 {
-  "name": "dess-proxy",
+  "name": "smart-ess-api-gateway",
   "version": "1.0.0",
   "description": "",
-  "author": "",
-  "private": true,
+  "author": "Antoxa1081",
   "license": "UNLICENSED",
   "scripts": {
     "build": "tsc",
