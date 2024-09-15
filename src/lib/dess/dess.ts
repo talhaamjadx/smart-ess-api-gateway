@@ -20,7 +20,7 @@ import { appConfig } from '../../config';
 const sharedRequestParams = {
   source: '1',
   devcode: appConfig.dess.device.devcode,
-  devaddr: '1',
+  devaddr: appConfig.dess.device.devaddress,
 };
 
 export async function authUser(
@@ -30,6 +30,7 @@ export async function authUser(
 ): Promise<DessAuthResponseData> {
   const salt = new Date().getTime().toString();
   const pwdSha1 = hashedPassword ? password : hashSha1(password);
+  console.log('user:pwdSha1', pwdSha1);
   const params = {
     action: DESS_QUERY_ACTION.AUTH_SOURCE,
     usr: username,
