@@ -11,7 +11,7 @@ DESS_AUTH_PASSWORD_HASH=sha1password(optional)
 DESS_DEVICE_PN=Q0000000000000 #your PN
 DESS_DEVICE_SN=55555555555555 #your SN
 DESS_DEVICE_DEVCODE=2428 #your protocol ID
-DESS_DEVICE_DEVADDRESS=5 #your protocol devadress
+DESS_DEVICE_DEVADDR=5 #your protocol devadress
 ```
 
 Build and start server. Listening by default on 3000 port
