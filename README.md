@@ -17,6 +17,99 @@ DEVICE_BATTERY_VOLTAGE=48 #your battery voltage
 
 Build and start server. Listening by default on 3000 port
 
+
+*HA rest configuration.yaml
+```yaml
+rest:
+  - resource: "http://localhost:3000/data"
+    sensor:
+      - name: "solar_inverter_pv_output_power"
+        unique_id: "solar_inverter_pv_output_power"
+        value_template: "{{ value_json.formattedData.solar_pv_power }}"
+        device_class: power
+        unit_of_measurement: "W"
+
+      - name: "solar_inverter_load_active_power"
+        value_template: "{{ value_json.webQueryDeviceEnergyFlowEs.bc_status|selectattr('par', 'equalto', 'load_active_power')|map(attribute='val')|first|float }}"
+        device_class: power
+        unit_of_measurement: "kW"
+
+      - name: "solar_inverter_gd_grid_voltage"
+        value_template: "{{ value_json.formattedData.solar_grid_in_voltage }}"
+        device_class: voltage
+        unit_of_measurement: "V"
+
+      - name: "solar_inverter_pv_voltage"
+        value_template: "{{ value_json.formattedData.solar_pv_voltage }}"
+        device_class: voltage
+        unit_of_measurement: "V"
+
+      - name: "solar_inverter_pv_input_current"
+        value_template: "{{ 0 }}"
+        device_class: current
+        unit_of_measurement: "A"
+
+      - name: "solar_inverter_bt_discharge_current"
+        value_template: "{{ value_json.formattedData.battery_discharge_current }}"
+        device_class: current
+        unit_of_measurement: "A"
+
+      - name: "solar_inverter_bt_battery_voltage"
+        value_template: "{{ value_json.formattedData.battery_voltage }}"
+        device_class: voltage
+        unit_of_measurement: "V"
+
+
+      - name: "solar_inverter_bt_real_level"
+        value_template: "{{ value_json.formattedData.battery_real_level }}"
+        device_class: battery
+        unit_of_measurement: "%"
+
+
+      - name: "solar_inverter_bt_charging_current"
+        value_template: "{{ value_json.formattedData.battery_charging_current }}"
+        device_class: current
+        unit_of_measurement: "A"
+
+      - name: "solar_inverter_priority"
+        value_template: "{{ value_json.formattedData.output_source_priority }}"
+        device_class: enum
+
+      - name: "solar_inverter_battery_status"
+        value_template: "{{ value_json.formattedData.battery_status }}"
+        device_class: enum
+
+      - name: "solar_inverter_battery_charger_source_priority"
+        value_template: "{{ value_json.formattedData.battery_charger_source_priority }}"
+        device_class: enum
+
+rest_command:
+  solar_inverter_set_output_priority:
+    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value={{ source_type_index }}" # Utility, Solar, SBU
+  solar_inverter_change_priority_usb:
+    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=0"
+  solar_inverter_change_priority_sol:
+    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=1"
+  solar_inverter_change_priority_sbu:
+    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=2"
+
+
+
+  solar_inverter_set_charge_utility_current:
+    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value={{ charge_current }}"
+  solar_inverter_charge_utility_current_fast:
+    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=30"
+  solar_inverter_charge_utility_current_default:
+    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=20"
+  solar_inverter_charge_utility_current_slow:
+    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=10"
+
+
+  solar_inverter_set_charger_priority:
+    url: "http://localhost:3000/settings-set?id=bat_charger_source_priority&value={{ charger_priority_index }}" # Solar priority, Solar and mains, Solar only
+
+```
+
 Available routes to fetch data:
  - GET /data -> ResponseDessHttpData
 ```json
@@ -621,4 +714,5 @@ Available routes to fetch data:
 }
 ```
 
-Example data for devcode 2341 & address 5 (or else)
+[//]: # ()
+[//]: # (Example data for devcode 2341 & address 5 &#40;or else&#41;)
