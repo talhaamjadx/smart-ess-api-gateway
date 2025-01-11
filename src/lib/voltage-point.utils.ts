@@ -1,3 +1,5 @@
+import { appConfig } from '../config';
+
 export interface VoltagePoint {
   level: number;
   value: number;
@@ -48,7 +50,10 @@ export const VOLTAGE_POINTS_LIFEPO4: VoltagePoint[] = [
     level: 0,
     value: 40,
   },
-];
+].map((i) => ({
+  ...i,
+  value: (i.value * appConfig.dess.device.batteryVoltage) / 48,
+}));
 
 export function getPercentByVoltage(
   value: number,

@@ -13,6 +13,7 @@ export const appConfig = {
       sn: env.DESS_DEVICE_SN,
       devcode: env.DESS_DEVICE_DEVCODE,
       devaddress: env.DESS_DEVICE_DEVADDR,
+      batteryVoltage: Number(env.DEVICE_BATTERY_VOLTAGE ?? '48'),
     },
   },
 };
