@@ -1,6 +1,10 @@
 import { server } from './server';
 import * as dess from '../lib/dess/dess';
-import { setDeviceParsEs } from '../lib/dess/dess';
+import {
+  resolveTargetOptions,
+  setDeviceParsEs,
+  TargetOptions,
+} from '../lib/dess/dess';
 import { ResponseDessHttpData, ResponseDessHttpSettings } from './responses';
 import {
   ParameterPrefix,
@@ -12,6 +16,7 @@ import {
   performAuth,
 } from '../actions/auth-service';
 import { getPercentByVoltage } from '../lib/voltage-point.utils';
+import { appConfig } from '../config';
 
 server.get('/auth', async function handler(request, reply) {
   const auth =
@@ -25,16 +30,32 @@ server.get('/auth', async function handler(request, reply) {
 
 server.get('/data', async function handler(request, reply) {
   const auth = formatAuthData(await authRenewCheck());
+  const target: TargetOptions = resolveTargetOptions({
+    pn: request.query['pn'],
+    sn: request.query['sn'],
+    devcode: request.query['devcode'],
+    devaddr: request.query['devaddr'],
+  });
+
   const [webQueryDeviceEnergyFlowEs, querySPDeviceLastData, queryDeviceParsEs] =
     await Promise.all([
-      dess.webQueryDeviceEnergyFlowEs(auth),
-      dess.querySPDeviceLastData(auth),
-      dess.queryDeviceParsEs(auth),
+      dess.webQueryDeviceEnergyFlowEs(auth, target),
+      dess.querySPDeviceLastData(auth, target),
+      dess.queryDeviceParsEs(auth, target),
     ]);
 
   const getParameter = (prefix: ParameterPrefix, parameter: string) =>
     querySPDeviceLastData.pars[prefix].find((i) => i.id === parameter)?.val;
 
+  const inverterDataRatedBatteryVoltage = getParameter(
+    ParameterPrefix.SYSTEM,
+    'sy_rated_battery_voltage',
+  );
+  const batteryRatedVoltage = Number(
+    request.query['battery_voltage'] ??
+      inverterDataRatedBatteryVoltage ??
+      appConfig.dess.device.batteryVoltage,
+  );
   const bt_battery_voltage = getParameter(
     ParameterPrefix.BATTERY,
     'bt_battery_voltage',
@@ -68,8 +89,10 @@ server.get('/data', async function handler(request, reply) {
   );
   const battery_real_level = getPercentByVoltage(
     Number(bt_battery_voltage),
+    batteryRatedVoltage,
   ).toFixed(1);
   const payload: ResponseDessHttpData = {
+    target,
     webQueryDeviceEnergyFlowEs,
     querySPDeviceLastData,
     queryDeviceParsEs,
@@ -92,9 +115,15 @@ server.get('/data', async function handler(request, reply) {
 
 server.get('/settings', async function handler(request, reply) {
   const auth = formatAuthData(await authRenewCheck());
+  const target: TargetOptions = resolveTargetOptions({
+    pn: request.query['pn'],
+    sn: request.query['sn'],
+    devcode: request.query['devcode'],
+    devaddr: request.query['devaddr'],
+  });
   const settings = await Promise.all(
     Object.values(QUERY_DEVICE_CONTROL_ID).map((id) =>
-      dess.queryDeviceCtrlValue(auth, id),
+      dess.queryDeviceCtrlValue(auth, id, target),
     ),
   );
   const payload: ResponseDessHttpSettings = {
@@ -107,10 +136,17 @@ server.get('/settings', async function handler(request, reply) {
 server.get('/settings-set', async function handler(request, reply) {
   const auth = formatAuthData(await authRenewCheck());
   console.log(request.query);
+  const target: TargetOptions = resolveTargetOptions({
+    pn: request.query['pn'],
+    sn: request.query['sn'],
+    devcode: request.query['devcode'],
+    devaddr: request.query['devaddr'],
+  });
   const payload = await setDeviceParsEs(
     auth,
     request.query['id'],
     request.query['value'],
+    target,
   );
   reply.send(payload);
 });

@@ -165,4 +165,5 @@ export enum ParameterPrefix {
   PV = 'pv_',
   GRID = 'gd_',
   BC = 'bc_',
+  SYSTEM = 'sy_',
 }

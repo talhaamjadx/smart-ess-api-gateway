@@ -1,5 +1,5 @@
 Go to https://www.dessmonitor.com and get your inverter SN and datalogger PN
-and get your datalogger protocol ID (4 numbers), devadress (1 number) - Select object > Device Info > table with fields 
+and get your datalogger protocol ID (4 numbers), devadress (1 number) - Select object > Device Info > table with fields
 
 Fill up .env with
 
@@ -17,8 +17,8 @@ DEVICE_BATTERY_VOLTAGE=48 #your battery voltage
 
 Build and start server. Listening by default on 3000 port
 
-
 *HA rest configuration.yaml
+
 ```yaml
 rest:
   - resource: "http://localhost:3000/data"
@@ -111,9 +111,30 @@ rest_command:
 ```
 
 Available routes to fetch data:
- - GET /data -> ResponseDessHttpData
+
+- GET /data -> ResponseDessHttpData
+- Available query params (for to get info from other devices)
+
+```
+pn
+sn
+devcode
+devaddr
+```
+
+```
+/data?pn=Q0000000000000&sn=55555555555555&devcode=2428&devaddr=5
+```
+
 ```json
 {
+  "target": {
+    "pn": "Q0000000000000",
+    "sn": "55555555555555",
+    "devcode": "2428",
+    "devaddr": "5",
+    "source": "1"
+  },
   "webQueryDeviceEnergyFlowEs": {
     "brand": 0,
     "status": 0,
@@ -299,7 +320,9 @@ Available routes to fetch data:
   }
 }
 ```
- - GET /settings -> ResponseDessHttpSettings
+
+- GET /settings -> ResponseDessHttpSettings
+
 ```json
 {
   "settings": [
@@ -715,4 +738,5 @@ Available routes to fetch data:
 ```
 
 [//]: # ()
+
 [//]: # (Example data for devcode 2341 & address 5 &#40;or else&#41;)

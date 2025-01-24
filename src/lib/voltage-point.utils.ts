@@ -1,10 +1,9 @@
-import { appConfig } from '../config';
-
 export interface VoltagePoint {
   level: number;
   value: number;
 }
 
+export const VOLTAGE_POINTS_BASE = 48;
 export const VOLTAGE_POINTS_LIFEPO4: VoltagePoint[] = [
   {
     level: 100,
@@ -50,21 +49,24 @@ export const VOLTAGE_POINTS_LIFEPO4: VoltagePoint[] = [
     level: 0,
     value: 40,
   },
-].map((i) => ({
-  ...i,
-  value: (i.value * appConfig.dess.device.batteryVoltage) / 48,
-}));
+];
 
 export function getPercentByVoltage(
   value: number,
+  batteryVoltage = VOLTAGE_POINTS_BASE,
   points: VoltagePoint[] = VOLTAGE_POINTS_LIFEPO4,
 ) {
-  const max = points[0];
-  const min = points[points.length - 1];
+  const currentPoints = points.map((i) => ({
+    ...i,
+    value: (i.value * batteryVoltage) / VOLTAGE_POINTS_BASE,
+  }));
+  const max = currentPoints[0];
+  const min = currentPoints[currentPoints.length - 1];
   const point =
-    points.find((p) => p.value <= value) || (value > max.value ? max : min);
-  const level = points.indexOf(point);
-  const next = points[level - 1];
+    currentPoints.find((p) => p.value <= value) ||
+    (value > max.value ? max : min);
+  const level = currentPoints.indexOf(point);
+  const next = currentPoints[level - 1];
   if (next) {
     const pointsValueDiff = Math.abs(next.value - point.value);
     const pointsLevelDiff = Math.abs(next.level - point.level);

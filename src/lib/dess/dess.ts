@@ -23,6 +23,23 @@ const sharedRequestParams = {
   devaddr: appConfig.dess.device.devaddress,
 };
 
+export interface TargetOptions {
+  pn?: string;
+  sn?: string;
+  devcode?: string;
+  devaddr?: string;
+}
+
+export function resolveTargetOptions(target?: TargetOptions) {
+  return {
+    pn: target?.pn ?? appConfig.dess.device.pn,
+    sn: target?.sn ?? appConfig.dess.device.sn,
+    devcode: target?.devcode ?? sharedRequestParams.devcode,
+    devaddr: target?.devaddr ?? sharedRequestParams.devaddr,
+    source: '1',
+  };
+}
+
 export async function authUser(
   username: string,
   password: string,
@@ -54,64 +71,60 @@ export async function authUser(
 
 export async function webQueryDeviceEnergyFlowEs(
   auth: DessAuthParams,
+  target: TargetOptions,
 ): Promise<WebQueryDeviceEnergyFlowEs> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.WEB_QUERY_DEVICE_ENERGY_FLOW_ES,
-    ...sharedRequestParams,
-    pn: appConfig.dess.device.pn,
-    sn: appConfig.dess.device.sn,
+    ...target,
   });
 }
 
 export async function querySPDeviceLastData(
   auth: DessAuthParams,
+  target: TargetOptions,
 ): Promise<QuerySpdeviceLastData> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.QUERY_SPDEVICE_LAST_DATA,
-    ...sharedRequestParams,
     i18n: 'en_US',
-    pn: appConfig.dess.device.pn,
-    sn: appConfig.dess.device.sn,
+    ...target,
   });
 }
 
 export async function queryDeviceCtrlValue(
   auth: DessAuthParams,
   id: QUERY_DEVICE_CONTROL_ID = QUERY_DEVICE_CONTROL_ID.bse_output_source_priority,
+  target: TargetOptions,
 ): Promise<QueryDeviceCtrlValue> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.QUERY_DEVICE_CTRL_VALUE,
-    ...sharedRequestParams,
     i18n: 'en_US',
-    pn: appConfig.dess.device.pn,
-    sn: appConfig.dess.device.sn,
+    ...target,
     id,
   });
 }
 
 export async function queryDeviceParsEs(
   auth: DessAuthParams,
+  target: TargetOptions,
 ): Promise<QueryDeviceParsEs> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.QUERY_DEVICE_PARS_ES,
-    ...sharedRequestParams,
     i18n: 'en_US',
-    pn: appConfig.dess.device.pn,
-    sn: appConfig.dess.device.sn,
+    ...target,
   });
 }
+
 export async function setDeviceParsEs(
   auth: DessAuthParams,
   id: QUERY_DEVICE_CONTROL_ID = QUERY_DEVICE_CONTROL_ID.bse_output_source_priority,
   value: string,
+  target: TargetOptions,
 ): Promise<QueryDeviceParsEs> {
   return createAuthApiRemoteRequest(auth, {
     action: DESS_QUERY_ACTION.CTRL_DEVICE,
-    ...sharedRequestParams,
     i18n: 'en_US',
-    pn: appConfig.dess.device.pn,
-    sn: appConfig.dess.device.sn,
     id,
     val: value,
+    ...target,
   });
 }
