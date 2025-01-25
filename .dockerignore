@@ -19,3 +19,4 @@ packages/*/node_modules
 temp
 .cache
 .idea
+.env

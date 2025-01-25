@@ -16,7 +16,10 @@ DEVICE_BATTERY_VOLTAGE=48 #your battery voltage
 ```
 
 Build and start server. Listening by default on 3000 port
+<br>
+Or use complete docker image https://hub.docker.com/r/antoxa1081/smart-ess-api-gateway
 
+<br>
 *HA rest configuration.yaml
 
 ```yaml
