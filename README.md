@@ -5,6 +5,10 @@ Fill up .env with
 
 ```dotenv
 DESS_AUTH_USERNAME=username
+# You need to choose one of the options: 
+# plain password (DESS_AUTH_PASSWORD) 
+# or hash (DESS_AUTH_PASSWORD_HASH)
+# both not allowed
 DESS_AUTH_PASSWORD=password(optional)
 DESS_AUTH_PASSWORD_HASH=sha1password(optional)
 
