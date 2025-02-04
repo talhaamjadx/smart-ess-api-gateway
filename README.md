@@ -117,6 +117,61 @@ rest_command:
 
 ```
 
+Energy sensor config (for Energy dashboard) before [2024.7.0](https://github.com/Olen/homeassistant-plant/releases/tag/v2024.7.0)
+```yaml
+sensor:
+  - platform: integration
+    source: sensor.solar_inverter_pv_output_power
+    name: solar_energy_produce
+    round: 2
+    method: trapezoidal
+    unit_time: h
+
+  - platform: integration
+    source: sensor.solar_inverter_battery_power_in
+    name: solar_battery_energy_in
+    round: 2
+    method: trapezoidal
+    unit_time: h
+
+  - platform: integration
+    source: sensor.solar_inverter_battery_power_out
+    name: solar_battery_energy_out
+    round: 2
+    method: trapezoidal
+    unit_time: h
+```
+Energy sensor config after [2024.7.0](https://github.com/Olen/homeassistant-plant/releases/tag/v2024.7.0)
+```yaml
+sensor:
+  - platform: integration
+    source: sensor.solar_inverter_pv_output_power
+    name: solar_energy_produce
+    round: 2
+    unit_time: h
+    max_sub_interval:
+      minutes: 5
+
+  - platform: integration
+    source: sensor.solar_inverter_battery_power_in
+    name: solar_battery_energy_in
+    round: 2
+    unit_time: h
+    max_sub_interval:
+      minutes: 5
+
+  - platform: integration
+    source: sensor.solar_inverter_battery_power_out
+    name: solar_battery_energy_out
+    round: 2
+    unit_time: h
+    max_sub_interval:
+      minutes: 5
+```
+<img src="https://github.com/user-attachments/assets/70ac8281-8f55-4b37-9d6b-dfbf73a03afd" width=20% height=20%>
+
+<img src="https://github.com/user-attachments/assets/af6cf353-2c3a-4ceb-bfa1-bba1de5949e7" width=20% height=20%>
+
 Available routes to fetch data:
 
 - GET /data -> ResponseDessHttpData
