@@ -145,6 +145,7 @@ export enum DESS_QUERY_ACTION {
   QUERY_DEVICE_CTRL_VALUE = 'queryDeviceCtrlValue',
   QUERY_DEVICE_PARS_ES = 'queryDeviceParsEs',
   CTRL_DEVICE = 'ctrlDevice',
+  WEB_QUERY_DEVICE_ES = 'webQueryDeviceEs',
 }
 
 export interface FormattedResponseData {
@@ -166,4 +167,41 @@ export enum ParameterPrefix {
   GRID = 'gd_',
   BC = 'bc_',
   SYSTEM = 'sy_',
+}
+
+export interface QueryDeviceList {
+  total: number;
+  page: number;
+  pagesize: number;
+  device: QueryDevice[];
+}
+
+export interface QueryDevice {
+  devalias: string;
+  sn: string;
+  status: number;
+  brand: number;
+  devtype: string;
+  collalias: string;
+  pn: string;
+  devaddr: number;
+  devcode: number;
+  usr: string;
+  uid: number;
+  profitToday: string;
+  profitTotal: string;
+  buyProfitToday: string;
+  buyProfitTotal: string;
+  sellProfitToday: string;
+  sellProfitTotal: string;
+  pid: number;
+  focus: boolean;
+  outpower: string;
+  energyToday: string;
+  energyYear: string;
+  energyTotal: string;
+  buyEnergyToday: string;
+  buyEnergyTotal: string;
+  sellEnergyToday: string;
+  sellEnergyTotal: string;
 }

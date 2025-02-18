@@ -11,6 +11,7 @@ import {
   DessAuthResponseData,
   QUERY_DEVICE_CONTROL_ID,
   QueryDeviceCtrlValue,
+  QueryDeviceList,
   QueryDeviceParsEs,
   QuerySpdeviceLastData,
   WebQueryDeviceEnergyFlowEs,
@@ -126,5 +127,18 @@ export async function setDeviceParsEs(
     id,
     val: value,
     ...target,
+  });
+}
+
+export async function queryDeviceList(
+  auth: DessAuthParams,
+): Promise<QueryDeviceList> {
+  return createAuthApiRequest(auth, {
+    action: DESS_QUERY_ACTION.WEB_QUERY_DEVICE_ES,
+    i18n: 'en_US',
+    source: '1',
+    devtype: '2304',
+    page: '0',
+    pagesize: '15',
   });
 }

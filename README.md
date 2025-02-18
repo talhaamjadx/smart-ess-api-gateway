@@ -174,6 +174,40 @@ sensor:
 
 Available routes to fetch data:
 
+- GET /devices -> QueryDevice[]
+
+```ts
+interface QueryDevice {
+  devalias: string;
+  sn: string;
+  status: number;
+  brand: number;
+  devtype: string;
+  collalias: string;
+  pn: string;
+  devaddr: number;
+  devcode: number;
+  usr: string;
+  uid: number;
+  profitToday: string;
+  profitTotal: string;
+  buyProfitToday: string;
+  buyProfitTotal: string;
+  sellProfitToday: string;
+  sellProfitTotal: string;
+  pid: number;
+  focus: boolean;
+  outpower: string;
+  energyToday: string;
+  energyYear: string;
+  energyTotal: string;
+  buyEnergyToday: string;
+  buyEnergyTotal: string;
+  sellEnergyToday: string;
+  sellEnergyTotal: string;
+}
+```
+
 - GET /data -> ResponseDessHttpData
 - Available query params (for to get info from other devices)
 

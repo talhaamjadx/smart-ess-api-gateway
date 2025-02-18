@@ -1,6 +1,7 @@
 import { server } from './server';
 import * as dess from '../lib/dess/dess';
 import {
+  queryDeviceList,
   resolveTargetOptions,
   setDeviceParsEs,
   TargetOptions,
@@ -26,6 +27,12 @@ server.get('/auth', async function handler(request, reply) {
   reply.send({
     auth,
   });
+});
+
+server.get('/devices', async function handler(request, reply) {
+  const auth = formatAuthData(await authRenewCheck());
+  const response = await queryDeviceList(auth);
+  reply.send(response.device);
 });
 
 server.get('/data', async function handler(request, reply) {
