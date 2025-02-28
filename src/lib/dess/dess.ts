@@ -13,6 +13,7 @@ import {
   QueryDeviceCtrlValue,
   QueryDeviceList,
   QueryDeviceParsEs,
+  QueryDeviceStatus,
   QuerySpdeviceLastData,
   WebQueryDeviceEnergyFlowEs,
 } from './dess-api.types';
@@ -29,6 +30,7 @@ export interface TargetOptions {
   sn?: string;
   devcode?: string;
   devaddr?: string;
+  name?: string;
 }
 
 export function resolveTargetOptions(target?: TargetOptions) {
@@ -38,6 +40,7 @@ export function resolveTargetOptions(target?: TargetOptions) {
     devcode: target?.devcode ?? sharedRequestParams.devcode,
     devaddr: target?.devaddr ?? sharedRequestParams.devaddr,
     source: '1',
+    name: target?.name,
   };
 }
 
@@ -132,6 +135,9 @@ export async function setDeviceParsEs(
 
 export async function queryDeviceList(
   auth: DessAuthParams,
+  options?: {
+    status?: QueryDeviceStatus;
+  },
 ): Promise<QueryDeviceList> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.WEB_QUERY_DEVICE_ES,
@@ -140,5 +146,6 @@ export async function queryDeviceList(
     devtype: '2304',
     page: '0',
     pagesize: '15',
+    status: options?.status?.toString() || undefined,
   });
 }

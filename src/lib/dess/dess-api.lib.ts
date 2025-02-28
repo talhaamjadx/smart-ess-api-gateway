@@ -11,7 +11,11 @@ export function generateSign(
   token: string,
   params: Record<string, string>,
 ) {
-  let uriStr = transferUriStr(params);
+  let uriStr = transferUriStr(
+    Object.fromEntries(
+      Object.entries(params).filter(([k, v]) => v !== undefined && v !== null),
+    ),
+  );
   return hashSha1(`${salt}${secret}${token}&${uriStr}`);
 }
 

@@ -159,6 +159,7 @@ export interface FormattedResponseData {
   solar_pv_power: string;
   output_source_priority: string;
   battery_real_level: string;
+  load_active_power: string;
 }
 
 export enum ParameterPrefix {
@@ -175,26 +176,32 @@ export interface QueryDeviceList {
   pagesize: number;
   device: QueryDevice[];
 }
-
+export enum QueryDeviceStatus {
+  NORMAL,
+  OFFLINE,
+  FAULT,
+  STANDBY,
+  WARNING,
+}
 export interface QueryDevice {
-  devalias: string;
+  uid: number;
+  pid: number;
   sn: string;
-  status: number;
+  pn: string;
+  status: QueryDeviceStatus;
+  devalias: string;
   brand: number;
   devtype: string;
   collalias: string;
-  pn: string;
   devaddr: number;
   devcode: number;
   usr: string;
-  uid: number;
   profitToday: string;
   profitTotal: string;
   buyProfitToday: string;
   buyProfitTotal: string;
   sellProfitToday: string;
   sellProfitTotal: string;
-  pid: number;
   focus: boolean;
   outpower: string;
   energyToday: string;
