@@ -12,6 +12,11 @@ export interface DessAuthResponseData {
   uid: number;
 }
 
+export interface DessAuthResponseDataMap {
+  data: DessAuthResponseData;
+  issuedAt: Date;
+}
+
 export interface WebQueryDeviceEnergyFlowEs {
   brand: number;
   status: number;

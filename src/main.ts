@@ -1,9 +1,14 @@
 import { server } from './http/server';
 import './http/router';
 import { authWatchManager } from './actions/auth-service';
+import { appConfig } from './config';
 
 async function main() {
-  await authWatchManager();
+  if (appConfig.dess.auth.username) {
+    await authWatchManager();
+  } else {
+    console.warn('Auth credentials in env not found');
+  }
   server.listen(
     {
       port: Number.parseInt(process.env.PORT || '8000'),

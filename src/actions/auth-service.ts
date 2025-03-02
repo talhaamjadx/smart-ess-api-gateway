@@ -5,16 +5,45 @@ import { DessAuthResponseData } from '../lib/dess/dess-api.types';
 
 const AUTH_EDGE_DIFF = 60 * 60 * 1000;
 
-export async function performAuth() {
-  console.log('performAuth');
+export async function performAuth(authData?: {
+  username: string;
+  plainPassword?: string;
+  hashPassword?: string;
+}) {
+  const username = authData?.username ?? appConfig.dess.auth.username;
+  if (!username) {
+    throw new Error('AuthError: no username provided');
+  }
+  console.log(`performAuth for ${username}`);
+  const exist = state.authMap.get(username);
+  if (exist) {
+    const diff = new Date().getTime() - exist.issuedAt.getTime();
+    if (exist.data.expire * 1000 - diff <= AUTH_EDGE_DIFF) {
+      console.log(`exists auth renew for ${username}`);
+    } else {
+      console.log(`exists auth for ${username}`);
+      return exist.data;
+    }
+  }
+  const password =
+    authData?.hashPassword ||
+    authData?.plainPassword ||
+    appConfig.dess.auth.passwordHash ||
+    appConfig.dess.auth.password;
   const auth = await dess.authUser(
-    appConfig.dess.auth.username,
-    appConfig.dess.auth.passwordHash || appConfig.dess.auth.password,
-    !!appConfig.dess.auth.passwordHash,
+    username,
+    password,
+    !!authData?.hashPassword || !!appConfig.dess.auth?.passwordHash,
   );
   console.log('performAuth:success', auth.uid);
-  state.auth = auth;
-  state.authIssued = new Date().getTime();
+  state.authMap.set(username, {
+    data: auth,
+    issuedAt: new Date(),
+  });
+  if (!authData) {
+    state.auth = auth;
+    state.authIssued = new Date().getTime();
+  }
   return auth;
 }
 

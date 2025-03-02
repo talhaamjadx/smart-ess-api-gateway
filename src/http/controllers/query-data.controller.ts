@@ -1,4 +1,8 @@
-import { authRenewCheck, formatAuthData } from '../../actions/auth-service';
+import {
+  authRenewCheck,
+  formatAuthData,
+  performAuth,
+} from '../../actions/auth-service';
 import { resolveTargetOptions, TargetOptions } from '../../lib/dess/dess';
 import * as dess from '../../lib/dess/dess';
 import { ParameterPrefix } from '../../lib/dess/dess-api.types';
@@ -14,8 +18,22 @@ export async function controllerGetData(query: {
   devaddr?: string;
   battery_voltage?: string;
   name?: string;
+  auth_username?: string;
+  auth_password?: string;
+  auth_hash_password?: string;
 }) {
-  const auth = formatAuthData(await authRenewCheck());
+  const hasRequestAuthData =
+    query?.auth_username?.length &&
+    (query?.auth_password?.length || query?.auth_hash_password?.length);
+  const auth = formatAuthData(
+    hasRequestAuthData
+      ? await performAuth({
+          username: query?.auth_username,
+          hashPassword: query?.auth_hash_password,
+          plainPassword: query?.auth_password,
+        })
+      : await authRenewCheck(),
+  );
   const target: TargetOptions = resolveTargetOptions({
     pn: query['pn'],
     sn: query['sn'],
