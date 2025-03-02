@@ -137,13 +137,16 @@ export async function queryDeviceList(
   auth: DessAuthParams,
   options?: {
     status?: QueryDeviceStatus;
+    sn?: string;
+    devtype?: string;
   },
 ): Promise<QueryDeviceList> {
   return createAuthApiRequest(auth, {
     action: DESS_QUERY_ACTION.WEB_QUERY_DEVICE_ES,
     i18n: 'en_US',
     source: '1',
-    devtype: '2304',
+    devtype: options?.devtype,
+    sn: options?.sn,
     page: '0',
     pagesize: '15',
     status: options?.status?.toString() || undefined,

@@ -3,7 +3,11 @@ import {
   formatAuthData,
   performAuth,
 } from '../../actions/auth-service';
-import { resolveTargetOptions, TargetOptions } from '../../lib/dess/dess';
+import {
+  queryDeviceList,
+  resolveTargetOptions,
+  TargetOptions,
+} from '../../lib/dess/dess';
 import * as dess from '../../lib/dess/dess';
 import { ParameterPrefix } from '../../lib/dess/dess-api.types';
 import { appConfig } from '../../config';
@@ -41,13 +45,19 @@ export async function controllerGetData(query: {
     devaddr: query['devaddr'],
     name: query['name'],
   });
-
-  const [webQueryDeviceEnergyFlowEs, querySPDeviceLastData, queryDeviceParsEs] =
-    await Promise.all([
-      dess.webQueryDeviceEnergyFlowEs(auth, target),
-      dess.querySPDeviceLastData(auth, target),
-      dess.queryDeviceParsEs(auth, target),
-    ]);
+  const [
+    webQueryDeviceEnergyFlowEs,
+    querySPDeviceLastData,
+    queryDeviceParsEs,
+    queryDeviceList,
+  ] = await Promise.all([
+    dess.webQueryDeviceEnergyFlowEs(auth, target),
+    dess.querySPDeviceLastData(auth, target),
+    dess.queryDeviceParsEs(auth, target),
+    dess.queryDeviceList(auth, {
+      sn: target.sn,
+    }),
+  ]);
 
   const getParameter = (prefix: ParameterPrefix, parameter: string) =>
     querySPDeviceLastData.pars[prefix]?.find((i) => i.id === parameter)?.val;
@@ -105,6 +115,7 @@ export async function controllerGetData(query: {
     webQueryDeviceEnergyFlowEs,
     querySPDeviceLastData,
     queryDeviceParsEs,
+    deviceData: queryDeviceList.device[0],
     formattedData: {
       battery_voltage: bt_battery_voltage,
       battery_status: bt_battery_status,
