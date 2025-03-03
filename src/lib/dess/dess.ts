@@ -138,6 +138,7 @@ export async function queryDeviceList(
   options?: {
     status?: QueryDeviceStatus;
     sn?: string;
+    pn?: string;
     devtype?: string;
   },
 ): Promise<QueryDeviceList> {
@@ -147,6 +148,7 @@ export async function queryDeviceList(
     source: '1',
     devtype: options?.devtype,
     sn: options?.sn,
+    pn: options?.pn,
     page: '0',
     pagesize: '15',
     status: options?.status?.toString() || undefined,

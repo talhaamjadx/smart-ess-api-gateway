@@ -56,6 +56,7 @@ export async function controllerGetData(query: {
     dess.queryDeviceParsEs(auth, target),
     dess.queryDeviceList(auth, {
       sn: target.sn,
+      pn: target.pn,
     }),
   ]);
 
@@ -116,6 +117,7 @@ export async function controllerGetData(query: {
     querySPDeviceLastData,
     queryDeviceParsEs,
     deviceData: queryDeviceList.device[0],
+    // queryDeviceList: queryDeviceList.device,
     formattedData: {
       battery_voltage: bt_battery_voltage,
       battery_status: bt_battery_status,
