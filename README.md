@@ -1,3 +1,8 @@
+### Home Assistant Native component
+Initial alpha version of custom Home Assistant component
+https://github.com/Antoxa1081/home-assistant-dess-monitor
+
+### Api Gateway
 Go to https://www.dessmonitor.com and get your inverter SN and datalogger PN
 and get your datalogger protocol ID (4 numbers), devadress (1 number) - Select object > Device Info > table with fields
 
