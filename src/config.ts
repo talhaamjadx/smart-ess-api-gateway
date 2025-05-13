@@ -1,19 +1,23 @@
 import { config } from 'dotenv-flow';
 
-const env = config().parsed;
+if (process.env.NODE_ENV !== 'production') {
+  config(); // Load from local .env* files
+}
+
+// Define appConfig from process.env (always available on Render)
 export const appConfig = {
   dess: {
     auth: {
-      username: env.DESS_AUTH_USERNAME,
-      password: env.DESS_AUTH_PASSWORD || null,
-      passwordHash: env.DESS_AUTH_PASSWORD_HASH || null,
+      username: process.env.DESS_AUTH_USERNAME,
+      password: process.env.DESS_AUTH_PASSWORD || null,
+      passwordHash: process.env.DESS_AUTH_PASSWORD_HASH || null,
     },
     device: {
-      pn: env.DESS_DEVICE_PN,
-      sn: env.DESS_DEVICE_SN,
-      devcode: env.DESS_DEVICE_DEVCODE,
-      devaddress: env.DESS_DEVICE_DEVADDR,
-      batteryVoltage: Number(env.DEVICE_BATTERY_VOLTAGE ?? '48'),
+      pn: process.env.DESS_DEVICE_PN,
+      sn: process.env.DESS_DEVICE_SN,
+      devcode: process.env.DESS_DEVICE_DEVCODE,
+      devaddress: process.env.DESS_DEVICE_DEVADDR,
+      batteryVoltage: Number(process.env.DEVICE_BATTERY_VOLTAGE ?? '48'),
     },
   },
 };
