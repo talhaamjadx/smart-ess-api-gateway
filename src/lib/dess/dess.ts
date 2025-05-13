@@ -4,6 +4,7 @@ import {
   COMPANY_KEY,
   createAuthApiRemoteRequest,
   createAuthApiRequest,
+  generateParamsSign,
 } from './dess-api.lib';
 import {
   DESS_QUERY_ACTION,
@@ -51,7 +52,6 @@ export async function authUser(
 ): Promise<DessAuthResponseData> {
   const salt = new Date().getTime().toString();
   const pwdSha1 = hashedPassword ? password : hashSha1(password);
-  console.log('user:pwdSha1', pwdSha1);
   const params = {
     action: DESS_QUERY_ACTION.AUTH_SOURCE,
     usr: username,
@@ -65,6 +65,46 @@ export async function authUser(
       params: {
         sign,
         salt,
+        ...params,
+      },
+    })
+    .then((r) => {
+      return r.data.dat;
+    });
+}
+
+export async function publicStats(
+  pn: string,
+  sn: string,
+  devcode: string,
+  devaddr: string,
+  i18n: string,
+  parameter: string,
+  chartStatus: boolean,
+  date: string,
+  auth: any,
+): Promise<DessAuthResponseData> {
+  const params = {
+    action: DESS_QUERY_ACTION.LOAD_ACTIVE_POWER_ACTION,
+    source: '1',
+  };
+  let { sign, salt } = await generateParamsSign(auth.token, auth.secret, {
+    ...params,
+  });
+  return await api
+    .get('/public/', {
+      params: {
+        sign,
+        salt,
+        pn,
+        sn,
+        devcode,
+        devaddr,
+        i18n,
+        parameter,
+        chartStatus,
+        date,
+        token: auth.token,
         ...params,
       },
     })

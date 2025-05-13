@@ -151,6 +151,7 @@ export enum DESS_QUERY_ACTION {
   QUERY_DEVICE_PARS_ES = 'queryDeviceParsEs',
   CTRL_DEVICE = 'ctrlDevice',
   WEB_QUERY_DEVICE_ES = 'webQueryDeviceEs',
+  LOAD_ACTIVE_POWER_ACTION = 'querySPDeviceKeyParameterOneDay',
 }
 
 export interface FormattedResponseData {

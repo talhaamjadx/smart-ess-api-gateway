@@ -99,3 +99,35 @@ server.get('/metrics', async function handler(request, reply) {
   }
   reply.send(await register.metrics());
 });
+
+server.get('/load-power-stats', async function handler(request: any, reply) {
+  try {
+    const pn = process.env.DESS_DEVICE_PN || '';
+    const sn = process.env.DESS_DEVICE_SN || '';
+    const devcode = process.env.DESS_DEVICE_DEV_CODE || '';
+    const devaddr = process.env.DESS_DEVICE_DEV_ADDR || '';
+    const i18n = process.env.DESS_I18N || 'en_US';
+    const parameter = 'LOAD_ACTIVE_POWER';
+    const chartStatus = false;
+    const date = request.query?.date || new Date().toISOString().split('T')[0];
+    const { publicStats } = await import('../lib/dess/dess');
+    const auth = formatAuthData(await authRenewCheck());
+    const loadPowerData = await publicStats(
+      pn,
+      sn,
+      devcode,
+      devaddr,
+      i18n,
+      parameter,
+      chartStatus,
+      date,
+      auth,
+    );
+    reply.send(loadPowerData);
+  } catch (error) {
+    reply.status(500).send({
+      error: 'Failed to get load power stats',
+      details: error?.message || error,
+    });
+  }
+});
