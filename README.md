@@ -1,8 +1,10 @@
 ### Home Assistant Native component
+
 Initial alpha version of custom Home Assistant component
 https://github.com/Antoxa1081/home-assistant-dess-monitor
 
 ### Api Gateway
+
 Go to https://www.dessmonitor.com and get your inverter SN and datalogger PN
 and get your datalogger protocol ID (4 numbers), devadress (1 number) - Select object > Device Info > table with fields
 
@@ -10,8 +12,8 @@ Fill up .env with
 
 ```dotenv
 DESS_AUTH_USERNAME=username
-# You need to choose one of the options: 
-# plain password (DESS_AUTH_PASSWORD) 
+# You need to choose one of the options:
+# plain password (DESS_AUTH_PASSWORD)
 # or hash (DESS_AUTH_PASSWORD_HASH)
 # both not allowed
 DESS_AUTH_PASSWORD=password(optional)
@@ -33,96 +35,91 @@ Or use complete docker image https://hub.docker.com/r/antoxa1081/smart-ess-api-g
 
 ```yaml
 rest:
-  - resource: "http://localhost:3000/data"
+  - resource: 'http://localhost:3000/data'
     sensor:
-      - name: "solar_inverter_pv_output_power"
-        unique_id: "solar_inverter_pv_output_power"
-        value_template: "{{ value_json.formattedData.solar_pv_power }}"
+      - name: 'solar_inverter_pv_output_power'
+        unique_id: 'solar_inverter_pv_output_power'
+        value_template: '{{ value_json.formattedData.solar_pv_power }}'
         device_class: power
-        unit_of_measurement: "W"
+        unit_of_measurement: 'W'
 
-      - name: "solar_inverter_load_active_power"
+      - name: 'solar_inverter_load_active_power'
         value_template: "{{ value_json.webQueryDeviceEnergyFlowEs.bc_status|selectattr('par', 'equalto', 'load_active_power')|map(attribute='val')|first|float }}"
         device_class: power
-        unit_of_measurement: "kW"
+        unit_of_measurement: 'kW'
 
-      - name: "solar_inverter_gd_grid_voltage"
-        value_template: "{{ value_json.formattedData.solar_grid_in_voltage }}"
+      - name: 'solar_inverter_gd_grid_voltage'
+        value_template: '{{ value_json.formattedData.solar_grid_in_voltage }}'
         device_class: voltage
-        unit_of_measurement: "V"
+        unit_of_measurement: 'V'
 
-      - name: "solar_inverter_pv_voltage"
-        value_template: "{{ value_json.formattedData.solar_pv_voltage }}"
+      - name: 'solar_inverter_pv_voltage'
+        value_template: '{{ value_json.formattedData.solar_pv_voltage }}'
         device_class: voltage
-        unit_of_measurement: "V"
+        unit_of_measurement: 'V'
 
-      - name: "solar_inverter_pv_input_current"
-        value_template: "{{ 0 }}"
+      - name: 'solar_inverter_pv_input_current'
+        value_template: '{{ 0 }}'
         device_class: current
-        unit_of_measurement: "A"
+        unit_of_measurement: 'A'
 
-      - name: "solar_inverter_bt_discharge_current"
-        value_template: "{{ value_json.formattedData.battery_discharge_current }}"
+      - name: 'solar_inverter_bt_discharge_current'
+        value_template: '{{ value_json.formattedData.battery_discharge_current }}'
         device_class: current
-        unit_of_measurement: "A"
+        unit_of_measurement: 'A'
 
-      - name: "solar_inverter_bt_battery_voltage"
-        value_template: "{{ value_json.formattedData.battery_voltage }}"
+      - name: 'solar_inverter_bt_battery_voltage'
+        value_template: '{{ value_json.formattedData.battery_voltage }}'
         device_class: voltage
-        unit_of_measurement: "V"
+        unit_of_measurement: 'V'
 
-
-      - name: "solar_inverter_bt_real_level"
-        value_template: "{{ value_json.formattedData.battery_real_level }}"
+      - name: 'solar_inverter_bt_real_level'
+        value_template: '{{ value_json.formattedData.battery_real_level }}'
         device_class: battery
-        unit_of_measurement: "%"
+        unit_of_measurement: '%'
 
-
-      - name: "solar_inverter_bt_charging_current"
-        value_template: "{{ value_json.formattedData.battery_charging_current }}"
+      - name: 'solar_inverter_bt_charging_current'
+        value_template: '{{ value_json.formattedData.battery_charging_current }}'
         device_class: current
-        unit_of_measurement: "A"
+        unit_of_measurement: 'A'
 
-      - name: "solar_inverter_priority"
-        value_template: "{{ value_json.formattedData.output_source_priority }}"
+      - name: 'solar_inverter_priority'
+        value_template: '{{ value_json.formattedData.output_source_priority }}'
         device_class: enum
 
-      - name: "solar_inverter_battery_status"
-        value_template: "{{ value_json.formattedData.battery_status }}"
+      - name: 'solar_inverter_battery_status'
+        value_template: '{{ value_json.formattedData.battery_status }}'
         device_class: enum
 
-      - name: "solar_inverter_battery_charger_source_priority"
-        value_template: "{{ value_json.formattedData.battery_charger_source_priority }}"
+      - name: 'solar_inverter_battery_charger_source_priority'
+        value_template: '{{ value_json.formattedData.battery_charger_source_priority }}'
         device_class: enum
 
 rest_command:
   solar_inverter_set_output_priority:
-    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value={{ source_type_index }}" # Utility, Solar, SBU
+    url: 'http://localhost:3000/settings-set?id=los_output_source_priority&value={{ source_type_index }}' # Utility, Solar, SBU
   solar_inverter_change_priority_usb:
-    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=0"
+    url: 'http://localhost:3000/settings-set?id=los_output_source_priority&value=0'
   solar_inverter_change_priority_sol:
-    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=1"
+    url: 'http://localhost:3000/settings-set?id=los_output_source_priority&value=1'
   solar_inverter_change_priority_sbu:
-    url: "http://localhost:3000/settings-set?id=los_output_source_priority&value=2"
-
-
+    url: 'http://localhost:3000/settings-set?id=los_output_source_priority&value=2'
 
   solar_inverter_set_charge_utility_current:
-    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value={{ charge_current }}"
+    url: 'http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value={{ charge_current }}'
   solar_inverter_charge_utility_current_fast:
-    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=30"
+    url: 'http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=30'
   solar_inverter_charge_utility_current_default:
-    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=20"
+    url: 'http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=20'
   solar_inverter_charge_utility_current_slow:
-    url: "http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=10"
-
+    url: 'http://localhost:3000/settings-set?id=bat_max_utility_charge_current&value=10'
 
   solar_inverter_set_charger_priority:
-    url: "http://localhost:3000/settings-set?id=bat_charger_source_priority&value={{ charger_priority_index }}" # Solar priority, Solar and mains, Solar only
-
+    url: 'http://localhost:3000/settings-set?id=bat_charger_source_priority&value={{ charger_priority_index }}' # Solar priority, Solar and mains, Solar only
 ```
 
 Energy sensor config (for Energy dashboard) before [2024.7.0](https://github.com/Olen/homeassistant-plant/releases/tag/v2024.7.0)
+
 ```yaml
 sensor:
   - platform: integration
@@ -146,7 +143,9 @@ sensor:
     method: trapezoidal
     unit_time: h
 ```
+
 Energy sensor config after [2024.7.0](https://github.com/Olen/homeassistant-plant/releases/tag/v2024.7.0)
+
 ```yaml
 sensor:
   - platform: integration
@@ -173,6 +172,7 @@ sensor:
     max_sub_interval:
       minutes: 5
 ```
+
 <img src="https://github.com/user-attachments/assets/70ac8281-8f55-4b37-9d6b-dfbf73a03afd" width=20% height=20%>
 
 <img src="https://github.com/user-attachments/assets/af6cf353-2c3a-4ceb-bfa1-bba1de5949e7" width=20% height=20%>
@@ -461,7 +461,7 @@ devaddr
 }
 ```
 
-*Example responses for protocol id - 2428
+\*Example responses for protocol id - 2428
 
 ```json
 {
@@ -838,6 +838,5 @@ devaddr
 }
 ```
 
-[//]: # ()
-
-[//]: # (Example data for devcode 2341 & address 5 &#40;or else&#41;)
+[//]: #
+[//]: # 'Example data for devcode 2341 & address 5 (or else)'
