@@ -100,7 +100,7 @@ server.get('/metrics', async function handler(request, reply) {
   reply.send(await register.metrics());
 });
 
-server.get('/load-power-stats', async function handler(request: any, reply) {
+server.get('/stats', async function handler(request: any, reply) {
   try {
     const pn = process.env.DESS_DEVICE_PN || '';
     const sn = process.env.DESS_DEVICE_SN || '';
