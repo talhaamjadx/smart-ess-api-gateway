@@ -107,7 +107,7 @@ server.get('/load-power-stats', async function handler(request: any, reply) {
     const devcode = process.env.DESS_DEVICE_DEV_CODE || '';
     const devaddr = process.env.DESS_DEVICE_DEV_ADDR || '';
     const i18n = process.env.DESS_I18N || 'en_US';
-    const parameter = 'LOAD_ACTIVE_POWER';
+    const parameter = request.query?.parameter || 'LOAD_ACTIVE_POWER';
     const chartStatus = false;
     const date = request.query?.date || new Date().toISOString().split('T')[0];
     const { publicStats } = await import('../lib/dess/dess');
